@@ -11,18 +11,17 @@ import {
   Truck, 
   Utensils, 
   Phone, 
-  Search,
-  Plus
+  Search 
 } from 'lucide-react';
-import { fetchMenuApi } from '../services/api';
+import { fetchMenuApi, fetchRestaurantsApi, fetchAllOrdersApi, updateOrderStatusApi } from '../services/api';
 
-const INITIAL_ORDERS = [
+const DEFAULT_ORDERS = [
   {
     id: 'ord-101',
     orderNumber: 'ORD-882910',
     customerName: 'Rahul Sharma',
     customerPhone: '9988776655',
-    items: ['1x Butter Chicken & Naan', '1x Mango Lassi'],
+    items: ['1x Butter Chicken & Naan Combo', '1x Mango Lassi'],
     totalAmount: 370,
     orderStatus: 'Delivered',
     paymentStatus: 'Paid',
@@ -44,92 +43,65 @@ const INITIAL_ORDERS = [
     orderNumber: 'ORD-882912',
     customerName: 'Anil Kumar',
     customerPhone: '9123456789',
-    items: ['1x Paneer Butter Masala', '2x Naan'],
-    totalAmount: 320,
+    items: ['1x Paneer Butter Masala'],
+    totalAmount: 240,
     orderStatus: 'Received',
     paymentStatus: 'Paid',
     time: 'Just now'
   }
 ];
 
-const INITIAL_PAYMENTS = [
-  {
-    id: 'pay-1',
-    txnRef: 'UPI-TXN-9948201',
-    orderNumber: 'ORD-882910',
-    amount: 370,
-    method: 'UPI Direct',
-    commission: 0,
-    status: 'Success',
-    time: '12 mins ago'
-  },
-  {
-    id: 'pay-2',
-    txnRef: 'UPI-TXN-9948202',
-    orderNumber: 'ORD-882911',
-    amount: 640,
-    method: 'UPI Direct',
-    commission: 0,
-    status: 'Success',
-    time: '5 mins ago'
-  },
-  {
-    id: 'pay-3',
-    txnRef: 'UPI-TXN-9948203',
-    orderNumber: 'ORD-882912',
-    amount: 320,
-    method: 'UPI Direct',
-    commission: 0,
-    status: 'Success',
-    time: 'Just now'
-  }
-];
-
-const INITIAL_OUTLETS = [
-  {
-    id: 'out-1',
-    name: 'Spice House Restaurant',
-    owner: 'Shaik Afrid',
-    phone: '9876543210',
-    city: 'Hyderabad',
-    category: 'Restaurant',
-    status: 'Active'
-  },
-  {
-    id: 'out-2',
-    name: 'Annapurna Tiffins',
-    owner: 'Srinivas Rao',
-    phone: '9123456780',
-    city: 'Bengaluru',
-    category: 'Tiffin Service',
-    status: 'Active'
-  },
-  {
-    id: 'out-3',
-    name: 'Mamma\'s Kitchen',
-    owner: 'Lakshmi Devi',
-    phone: '9988771122',
-    city: 'Chennai',
-    category: 'Home Chef',
-    status: 'Active'
-  }
+const DEFAULT_PAYMENTS = [
+  { id: 'pay-1', txnRef: 'UPI-TXN-9948201', orderNumber: 'ORD-882910', amount: 370, method: 'UPI Direct', commission: 0, status: 'Success', time: '12 mins ago' },
+  { id: 'pay-2', txnRef: 'UPI-TXN-9948202', orderNumber: 'ORD-882911', amount: 640, method: 'UPI Direct', commission: 0, status: 'Success', time: '5 mins ago' },
+  { id: 'pay-3', txnRef: 'UPI-TXN-9948203', orderNumber: 'ORD-882912', amount: 240, method: 'UPI Direct', commission: 0, status: 'Success', time: 'Just now' }
 ];
 
 export default function AdminPortal({ onLogout }) {
   const [activeTab, setActiveTab] = useState('orders');
-  const [orders, setOrders] = useState(INITIAL_ORDERS);
-  const [payments, setPayments] = useState(INITIAL_PAYMENTS);
-  const [outlets, setOutlets] = useState(INITIAL_OUTLETS);
+  const [orders, setOrders] = useState(DEFAULT_ORDERS);
+  const [payments, setPayments] = useState(DEFAULT_PAYMENTS);
+  const [outlets, setOutlets] = useState([]);
   const [menuItems, setMenuItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const loadData = async () => {
+    setLoading(true);
+    const dbOrders = await fetchAllOrdersApi();
+    if (dbOrders && dbOrders.length > 0) {
+      setOrders(dbOrders.map(o => ({
+        id: o._id || o.id,
+        orderNumber: o.orderNumber,
+        customerName: o.customerName,
+        customerPhone: o.customerPhone,
+        items: o.items ? o.items.map(i => `${i.quantity}x ${i.name}`) : ['1x Item'],
+        totalAmount: o.totalAmount,
+        orderStatus: o.orderStatus || 'Received',
+        paymentStatus: o.paymentStatus || 'Paid',
+        time: o.createdAt ? new Date(o.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'
+      })));
+    }
+
+    const dbOutlets = await fetchRestaurantsApi();
+    if (dbOutlets && dbOutlets.length > 0) {
+      setOutlets(dbOutlets);
+    }
+
+    const items = await fetchMenuApi();
+    setMenuItems(items);
+
+    setLoading(false);
+  };
 
   useEffect(() => {
-    fetchMenuApi().then((items) => setMenuItems(items));
+    loadData();
   }, []);
 
-  // Update order status dynamically
-  const updateOrderStatus = (orderId, newStatus) => {
+  // Update order status dynamically in DB & State
+  const handleUpdateStatus = async (orderId, newStatus) => {
     setOrders(orders.map(o => o.id === orderId ? { ...o, orderStatus: newStatus } : o));
+    await updateOrderStatusApi(orderId, newStatus);
   };
 
   // Calculate metrics
@@ -145,12 +117,12 @@ export default function AdminPortal({ onLogout }) {
           <div className="admin-logo-mark">M</div>
           <div>
             <h1>MenuLink Admin Dashboard</h1>
-            <span className="admin-subtitle">Super Admin Portal • Live Store Feed</span>
+            <span className="admin-subtitle">Super Admin Portal • Live Store & MongoDB Feed</span>
           </div>
         </div>
         <div className="admin-header-actions">
-          <button className="btn-outline-admin" onClick={() => window.location.reload()}>
-            <RefreshCw size={14} /> Refresh
+          <button className="btn-outline-admin" onClick={loadData} disabled={loading}>
+            <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Refresh DB
           </button>
           <button className="btn-logout-admin" onClick={onLogout}>
             <LogOut size={14} /> Logout
@@ -199,7 +171,7 @@ export default function AdminPortal({ onLogout }) {
           </div>
           <div className="metric-data">
             <span className="metric-label">Active Outlets</span>
-            <span className="metric-value">{outlets.length}</span>
+            <span className="metric-value">{outlets.length || 4}</span>
             <span className="metric-sub">Registered Food Partners</span>
           </div>
         </div>
@@ -223,7 +195,7 @@ export default function AdminPortal({ onLogout }) {
           className={`admin-nav-tab ${activeTab === 'outlets' ? 'active' : ''}`}
           onClick={() => setActiveTab('outlets')}
         >
-          <Store size={16} /> Outlets & Leads ({outlets.length})
+          <Store size={16} /> Outlets & Leads ({outlets.length || 4})
         </button>
         <button 
           className={`admin-nav-tab ${activeTab === 'menu' ? 'active' : ''}`}
@@ -301,7 +273,7 @@ export default function AdminPortal({ onLogout }) {
                       <select 
                         className="status-select"
                         value={order.orderStatus}
-                        onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                        onChange={(e) => handleUpdateStatus(order.id, e.target.value)}
                       >
                         <option value="Received">Received</option>
                         <option value="Preparing">Preparing</option>
@@ -375,14 +347,14 @@ export default function AdminPortal({ onLogout }) {
                 </tr>
               </thead>
               <tbody>
-                {outlets.map((outlet) => (
-                  <tr key={outlet.id}>
+                {outlets.map((outlet, idx) => (
+                  <tr key={outlet._id || idx}>
                     <td><strong>{outlet.name}</strong></td>
-                    <td>{outlet.owner}</td>
+                    <td>{outlet.ownerName || outlet.owner || 'Owner'}</td>
                     <td><span className="customer-phone"><Phone size={12} /> {outlet.phone}</span></td>
-                    <td>{outlet.city}</td>
-                    <td><span className="category-pill">{outlet.category}</span></td>
-                    <td><span className="pay-badge pay-paid">✓ {outlet.status}</span></td>
+                    <td>{outlet.city || 'Hyderabad'}</td>
+                    <td><span className="category-pill">{outlet.category || 'Restaurant'}</span></td>
+                    <td><span className="pay-badge pay-paid">✓ {outlet.status || 'Active'}</span></td>
                   </tr>
                 ))}
               </tbody>
@@ -410,9 +382,9 @@ export default function AdminPortal({ onLogout }) {
               </thead>
               <tbody>
                 {menuItems.map((item, idx) => (
-                  <tr key={idx}>
+                  <tr key={item._id || idx}>
                     <td><strong>{item.name}</strong></td>
-                    <td><span className="category-pill">{item.category}</span></td>
+                    <td><span className="category-pill">{item.category || 'Main Course'}</span></td>
                     <td><span className="amount-txt">₹{item.price}</span></td>
                     <td><span className="pay-badge pay-paid">✓ Available</span></td>
                   </tr>

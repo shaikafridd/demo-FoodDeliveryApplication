@@ -1,266 +1,373 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, CheckCircle2, MessageSquare, BookOpen, CreditCard } from 'lucide-react';
+import { Send, Utensils, MessageSquare, IndianRupee, MapPin, Store, CheckCircle2, ArrowRight } from 'lucide-react';
+import { sendRenderChatApi, createOrderApi, verifyPaymentApi } from '../services/api';
 
-const API_URL = "https://demo-menulnk.onrender.com/chat";
-
-const PRESET_PROMPTS = [
-  "🍗 1x Butter Chicken & Naan",
-  "📜 Show today's specials",
-  "🛵 How fast is delivery?",
-  "💳 Do you accept UPI?"
+const SAMPLE_RESTAURANTS = [
+  { id: 'rest-1', name: 'Spice House Restaurant', area: 'Hitec City, Hyderabad', cuisine: 'Biryani & North Indian' },
+  { id: 'rest-2', name: 'Bawarchi Biryani', area: 'Kukatpally, Hyderabad', cuisine: 'Hyderabadi Biryani' },
+  { id: 'rest-3', name: 'Annapurna Tiffins', area: 'Jubilee Hills, Hyderabad', cuisine: 'South Indian Tiffins' },
+  { id: 'rest-4', name: "Mamma's Kitchen", area: 'Gachibowli, Hyderabad', cuisine: 'Home Chef Meals' },
 ];
 
-const DEMO_MENU = [
-  { id: 101, name: "Special Butter Chicken", price: "₹340", tag: "Bestseller" },
-  { id: 102, name: "Garlic Butter Naan (2 pcs)", price: "₹80", tag: "Fresh" },
-  { id: 103, name: "Hyderabadi Chicken Biryani", price: "₹290", tag: "Chef's Special" },
-  { id: 104, name: "Mango Lassi (300ml)", price: "₹90", tag: "Cooler" }
-];
+const MENU_ITEMS_MAP = {
+  'rest-1': [
+    { id: 'm101', name: 'Butter Chicken & Naan Combo', price: 280, category: 'Main Course' },
+    { id: 'm102', name: 'Special Chicken Biryani', price: 320, category: 'Biryani' },
+    { id: 'm103', name: 'Paneer Butter Masala', price: 240, category: 'Veg Main' },
+    { id: 'm104', name: 'Mango Lassi', price: 90, category: 'Beverages' },
+  ],
+  'rest-2': [
+    { id: 'm201', name: 'Hyderabadi Mutton Biryani', price: 380, category: 'Biryani' },
+    { id: 'm202', name: 'Chicken Dum Biryani (Family Pack)', price: 650, category: 'Biryani' },
+    { id: 'm203', name: 'Mirchi Ka Salan', price: 120, category: 'Sides' },
+  ],
+  'rest-3': [
+    { id: 'm301', name: 'Ghee Karam Masala Dosa', price: 110, category: 'Tiffins' },
+    { id: 'm302', name: 'Button Idli in Sambar (8 pcs)', price: 90, category: 'Tiffins' },
+    { id: 'm303', name: 'Filter Coffee', price: 40, category: 'Beverages' },
+  ],
+  'rest-4': [
+    { id: 'm401', name: 'Home Style Veg Thali', price: 160, category: 'Thali' },
+    { id: 'm402', name: 'Chicken Curry & Phulka Combo', price: 220, category: 'Combos' },
+  ]
+};
 
 export default function ChatWidget() {
-  const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'menu' | 'receipt'
-  const [messages, setMessages] = useState([
-    { id: 1, sender: 'bot', text: 'Hi! 👋 Welcome to Spice House. What would you like to order today?' }
-  ]);
-  const [input, setInput] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('chat'); // 'chat' | 'menu' | 'payout'
+  const [step, setStep] = useState('location'); // 'location' | 'restaurant' | 'menu' | 'confirmed'
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedRestaurant, setSelectedRestaurant] = useState(SAMPLE_RESTAURANTS[0]);
   const [cart, setCart] = useState([]);
-  const chatBodyRef = useRef(null);
-
-  const scrollToBottom = () => {
-    if (chatBodyRef.current) {
-      setTimeout(() => {
-        chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
-      }, 50);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      sender: 'bot',
+      text: '👋 Welcome to *MenuLink Direct Food Order*!\n\n📍 Please select or type your location to discover nearby restaurants:'
     }
-  };
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [lastOrder, setLastOrder] = useState(null);
+  const chatEndRef = useRef(null);
 
   useEffect(() => {
-    if (activeTab === 'chat') {
-      scrollToBottom();
-    }
-  }, [messages, loading, activeTab]);
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, isTyping]);
 
-  const generateSmartReply = (query) => {
-    const text = query.toLowerCase();
-    if (text.includes("butter chicken") || text.includes("naan")) {
-      return "Delicious choice! 🍗 1x Special Butter Chicken & Garlic Naan added to your order (Total: ₹420). Would you like to confirm via UPI or WhatsApp?";
-    } else if (text.includes("biryani")) {
-      return "Chef's Special Hyderabadi Chicken Biryani is fresh & hot today for ₹290! 🍲 Shall I add this to your order?";
-    } else if (text.includes("menu") || text.includes("special")) {
-      return "Here are today's Spice House top specials:\n• Special Butter Chicken — ₹340\n• Hyderabadi Biryani — ₹290\n• Garlic Naan (2 pcs) — ₹80\n• Mango Lassi — ₹90\nType what you want or click below!";
-    } else if (text.includes("delivery") || text.includes("fast") || text.includes("time")) {
-      return "🛵 Delivery usually takes 25-30 minutes! We deliver direct to your doorstep with 0% extra aggregator fees.";
-    } else if (text.includes("upi") || text.includes("pay") || text.includes("card")) {
-      return "💳 Yes! You can pay directly via Google Pay, PhonePe, Paytm or UPI QR Code. 100% money goes straight to Spice House.";
-    } else {
-      return `Got it! 👋 Spice House AI received your request for: "${query}". We have added this to your direct WhatsApp order!`;
-    }
-  };
+  // Handle location choice
+  const handleSelectLocation = (loc) => {
+    setSelectedLocation(loc);
+    setStep('restaurant');
 
-  const handleSend = async (textToSend) => {
-    const messageText = typeof textToSend === 'string' ? textToSend.trim() : input.trim();
-    if (!messageText || loading) return;
-
-    const userMessage = { id: Date.now(), sender: 'user', text: messageText };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setLoading(true);
-    scrollToBottom();
-
-    // Abort controller to prevent hanging if Render backend is sleeping
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 3000);
-
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: messageText }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        throw new Error(`Status ${response.status}`);
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now(), sender: 'user', text: `📍 Location: ${loc}` },
+      {
+        id: Date.now() + 1,
+        sender: 'bot',
+        text: `📍 Location set to *${loc}*!\n\n🏬 Please select a restaurant below to open their digital menu:`
       }
+    ]);
+  };
 
-      const data = await response.json();
-      const botReplyText = data.reply || generateSmartReply(messageText);
+  // Handle restaurant choice
+  const handleSelectRestaurant = (rest) => {
+    setSelectedRestaurant(rest);
+    setStep('menu');
 
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now() + 1, sender: 'bot', text: botReplyText }
-      ]);
-    } catch (err) {
-      clearTimeout(timeoutId);
-      // Fast fallback to smart local AI logic
-      const fallbackReply = generateSmartReply(messageText);
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now() + 1, sender: 'bot', text: fallbackReply }
-      ]);
-    } finally {
-      setLoading(false);
-      scrollToBottom();
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now(), sender: 'user', text: `🏬 Selected: ${rest.name}` },
+      {
+        id: Date.now() + 1,
+        sender: 'bot',
+        text: `🎉 Welcome to *${rest.name}* (${rest.area})!\n\nCheck out our menu below or ask me any question about dishes, recommendations, or pricing. 🍔🍕`
+      }
+    ]);
+  };
+
+  // Add Item to Cart
+  const handleAddToCart = (item) => {
+    const existing = cart.find((i) => i.id === item.id);
+    let updatedCart;
+    if (existing) {
+      updatedCart = cart.map((i) => (i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i));
+    } else {
+      updatedCart = [...cart, { ...item, quantity: 1 }];
     }
+    setCart(updatedCart);
+
+    const total = updatedCart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now(), sender: 'user', text: `Add ${item.name}` },
+      {
+        id: Date.now() + 1,
+        sender: 'bot',
+        text: `✅ Added *${item.name}* to cart!\nTotal Cart: ₹${total} (${updatedCart.length} items).\n\nType "checkout" or click "Confirm Order" to place your direct order.`
+      }
+    ]);
   };
 
-  const addToCart = (item) => {
-    setCart((prev) => [...prev, item]);
-    const userMsgText = `Add ${item.name} (${item.price}) to my order`;
-    setActiveTab('chat');
-    setTimeout(() => {
-      handleSend(userMsgText);
-    }, 100);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
+  // Process Checkout & Save to Database
+  const handleCheckoutOrder = async () => {
+    if (cart.length === 0) {
+      // Default sample item if empty
+      const defaultItem = { id: 'm101', name: 'Butter Chicken & Naan Combo', price: 280, quantity: 1 };
+      cart.push(defaultItem);
     }
+
+    const totalAmount = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+    setIsTyping(true);
+
+    // Call Node.js MongoDB API
+    const orderRes = await createOrderApi({
+      restaurantId: selectedRestaurant.id,
+      customerName: 'Rahul Sharma',
+      customerPhone: '9988776655',
+      deliveryAddress: `${selectedLocation || 'Hitec City'}, Hyderabad`,
+      items: cart.map((i) => ({ menuItemId: i.id, name: i.name, price: i.price, quantity: i.quantity })),
+      totalAmount,
+    });
+
+    const paymentRes = await verifyPaymentApi({
+      orderId: orderRes.order?._id || `ord-${Date.now()}`,
+      restaurantId: selectedRestaurant.id,
+      amount: totalAmount,
+      paymentMethod: 'UPI',
+    });
+
+    setIsTyping(false);
+    setStep('confirmed');
+    setLastOrder({
+      orderNumber: orderRes.order?.orderNumber || `ORD-${Date.now().toString().slice(-6)}`,
+      totalAmount,
+      txnRef: paymentRes.payment?.transactionRef || `UPI-TXN-${Date.now().toString().slice(-8)}`,
+      restaurantName: selectedRestaurant.name,
+      items: [...cart],
+    });
+
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now(), sender: 'user', text: '💳 Confirm Order & Pay via UPI' },
+      {
+        id: Date.now() + 1,
+        sender: 'bot',
+        text: `🎉 *Order Confirmed!* (${orderRes.order?.orderNumber || 'ORD-882910'})\n\n💰 Total Paid: ₹${totalAmount} via Instant UPI\n⚡ Commission Charged: ₹0.00 (100% saved!)\n\n🚚 Delivery Rider Dispatched! Track status in the receipt tab.`
+      }
+    ]);
+
+    setActiveTab('payout');
   };
+
+  // Handle User Message Submission
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!inputMessage.trim()) return;
+
+    const userText = inputMessage.trim();
+    setInputMessage('');
+
+    setMessages((prev) => [...prev, { id: Date.now(), sender: 'user', text: userText }]);
+
+    if (userText.toLowerCase().includes('checkout') || userText.toLowerCase().includes('pay') || userText.toLowerCase().includes('confirm')) {
+      handleCheckoutOrder();
+      return;
+    }
+
+    setIsTyping(true);
+
+    // 1. Try Render Chat API
+    let botReply = await sendRenderChatApi(userText);
+
+    // 2. If Render API offline, use smart fallback
+    if (!botReply) {
+      if (userText.toLowerCase().includes('hyderabad') || userText.toLowerCase().includes('bengaluru') || userText.toLowerCase().includes('mumbai')) {
+        botReply = `📍 Setting location to *${userText}*! Pick a restaurant from the list below:`;
+        handleSelectLocation(userText);
+      } else if (userText.toLowerCase().includes('biryani') || userText.toLowerCase().includes('chicken') || userText.toLowerCase().includes('paneer')) {
+        botReply = `🍽️ Great choice! We recommend our *Special Chicken Biryani* (₹320) or *Butter Chicken & Naan* (₹280). Click "Add" in the Menu tab to order!`;
+      } else {
+        botReply = `Thanks for reaching out! You can order directly from *${selectedRestaurant.name}* with 0% commission fees. What would you like to eat today? 🍔`;
+      }
+    }
+
+    setIsTyping(false);
+
+    setMessages((prev) => [
+      ...prev,
+      { id: Date.now() + 1, sender: 'bot', text: botReply }
+    ]);
+  };
+
+  const currentMenuItems = MENU_ITEMS_MAP[selectedRestaurant.id] || MENU_ITEMS_MAP['rest-1'];
+  const cartTotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
-    <div id="demo">
-      <div className="phone-frame">
-        <div className="phone-screen">
-          <div className="chat-head">
-            <div className="chat-avatar">SP</div>
-            <div>
-              <b>Spice House</b>
-              <span>MenuLink AI Agent · online</span>
+    <div className="phone-frame">
+      <div className="phone-screen">
+        {/* Header */}
+        <div className="chat-head">
+          <div className="chat-avatar">M</div>
+          <div>
+            <b>{selectedRestaurant.name}</b>
+            <span>Online • Instant UPI Order</span>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <div className="phone-tab-bar">
+          <button
+            className={`phone-tab ${activeTab === 'chat' ? 'active' : ''}`}
+            onClick={() => setActiveTab('chat')}
+          >
+            <MessageSquare size={13} /> Chat
+          </button>
+          <button
+            className={`phone-tab ${activeTab === 'menu' ? 'active' : ''}`}
+            onClick={() => setActiveTab('menu')}
+          >
+            <Utensils size={13} /> Menu {cart.length > 0 && `(${cart.length})`}
+          </button>
+          <button
+            className={`phone-tab ${activeTab === 'payout' ? 'active' : ''}`}
+            onClick={() => setActiveTab('payout')}
+          >
+            <IndianRupee size={13} /> Payout Receipt
+          </button>
+        </div>
+
+        {/* Tab 1: Chat Body */}
+        {activeTab === 'chat' && (
+          <>
+            <div className="chat-body">
+              {messages.map((msg) => (
+                <div key={msg.id} className={`bubble ${msg.sender}`}>
+                  {msg.text}
+                </div>
+              ))}
+              {isTyping && <div className="bubble bot typing">MenuLink AI is typing...</div>}
+              <div ref={chatEndRef} />
             </div>
-          </div>
 
-          <div className="phone-tab-bar">
-            <button
-              type="button"
-              className={`phone-tab ${activeTab === 'chat' ? 'active' : ''}`}
-              onClick={() => setActiveTab('chat')}
-            >
-              <MessageSquare size={13} /> Chat
-            </button>
-            <button
-              type="button"
-              className={`phone-tab ${activeTab === 'menu' ? 'active' : ''}`}
-              onClick={() => setActiveTab('menu')}
-            >
-              <BookOpen size={13} /> Menu
-            </button>
-            <button
-              type="button"
-              className={`phone-tab ${activeTab === 'receipt' ? 'active' : ''}`}
-              onClick={() => setActiveTab('receipt')}
-            >
-              <CreditCard size={13} /> Payout
-            </button>
-          </div>
-
-          {activeTab === 'chat' && (
-            <>
-              <div className="chat-body" ref={chatBodyRef}>
-                {messages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`bubble ${msg.sender === 'user' ? 'user' : 'bot'}`}
-                  >
-                    {msg.text}
-                  </div>
-                ))}
-                {loading && (
-                  <div className="bubble typing">
-                    <Bot size={14} className="animate-spin" /> typing…
-                  </div>
-                )}
-              </div>
-
+            {/* Interactive Step Prompts */}
+            {step === 'location' && (
               <div className="chat-quick-prompts">
-                {PRESET_PROMPTS.map((prompt, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    className="prompt-chip"
-                    onClick={() => handleSend(prompt)}
-                    disabled={loading}
-                  >
-                    {prompt}
-                  </button>
+                <span className="prompt-chip" onClick={() => handleSelectLocation('Hyderabad')}>
+                  📍 Hyderabad
+                </span>
+                <span className="prompt-chip" onClick={() => handleSelectLocation('Hitec City')}>
+                  📍 Hitec City
+                </span>
+                <span className="prompt-chip" onClick={() => handleSelectLocation('Jubilee Hills')}>
+                  📍 Jubilee Hills
+                </span>
+                <span className="prompt-chip" onClick={() => handleSelectLocation('Bengaluru')}>
+                  📍 Bengaluru
+                </span>
+              </div>
+            )}
+
+            {step === 'restaurant' && (
+              <div className="chat-quick-prompts">
+                {SAMPLE_RESTAURANTS.map((r) => (
+                  <span key={r.id} className="prompt-chip" onClick={() => handleSelectRestaurant(r)}>
+                    🏬 {r.name}
+                  </span>
                 ))}
               </div>
+            )}
 
-              <div className="chat-input-row">
-                <input
-                  type="text"
-                  placeholder="Type a message…"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  disabled={loading}
-                />
-                <button
-                  type="button"
-                  onClick={() => handleSend()}
-                  disabled={loading || !input.trim()}
-                >
-                  <Send size={15} />
+            {step === 'menu' && (
+              <div className="chat-quick-prompts">
+                <span className="prompt-chip" onClick={() => handleAddToCart(currentMenuItems[0])}>
+                  + Add {currentMenuItems[0]?.name.split(' ')[0]}
+                </span>
+                <span className="prompt-chip" onClick={handleCheckoutOrder}>
+                  💳 Confirm & Pay (₹{cartTotal || 280})
+                </span>
+              </div>
+            )}
+
+            <form onSubmit={handleSendMessage} className="chat-input-row">
+              <input
+                type="text"
+                placeholder="Type location, dish, or message..."
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+              />
+              <button type="submit">
+                <Send size={15} />
+              </button>
+            </form>
+          </>
+        )}
+
+        {/* Tab 2: Menu Items */}
+        {activeTab === 'menu' && (
+          <div className="phone-menu-tab">
+            <div className="menu-header">
+              <h4>{selectedRestaurant.name} Digital Menu</h4>
+              <p>📍 {selectedRestaurant.area} • 0% Commission</p>
+            </div>
+
+            <div className="menu-list">
+              {currentMenuItems.map((item) => (
+                <div key={item.id} className="menu-card-item">
+                  <div>
+                    <span className="item-name">{item.name}</span>
+                    <span className="item-price">₹{item.price}</span>
+                  </div>
+                  <button className="btn-add-item" onClick={() => handleAddToCart(item)}>
+                    + Add
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {cart.length > 0 && (
+              <div style={{ marginTop: '16px' }}>
+                <button className="btn-primary" onClick={handleCheckoutOrder} style={{ width: '100%' }}>
+                  Checkout ({cart.length} Items - ₹{cartTotal}) <ArrowRight size={16} />
                 </button>
               </div>
-            </>
-          )}
+            )}
+          </div>
+        )}
 
-          {activeTab === 'menu' && (
-            <div className="phone-menu-tab">
-              <div className="menu-header">
-                <h4>Spice House Digital Menu</h4>
-                <p>Click item to add directly into AI Chat</p>
-              </div>
-              <div className="menu-list">
-                {DEMO_MENU.map((item) => (
-                  <div key={item.id} className="menu-card-item">
-                    <div>
-                      <span className="item-name">{item.name}</span>
-                      <span className="item-price">{item.price}</span>
-                    </div>
-                    <button type="button" className="btn-add-item" onClick={() => addToCart(item)}>
-                      + Add
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Tab 3: Payout Receipt */}
+        {activeTab === 'payout' && (
+          <div className="phone-receipt-tab">
+            <div className="upi-receipt-card">
+              <CheckCircle2 size={36} color="var(--green)" style={{ margin: '0 auto' }} />
+              <h4>Instant UPI Payout Verified</h4>
+              <span className="receipt-amount">₹{lastOrder ? lastOrder.totalAmount : 370}.00</span>
+              <span className="receipt-sub">Order #{lastOrder ? lastOrder.orderNumber : 'ORD-882910'}</span>
 
-          {activeTab === 'receipt' && (
-            <div className="phone-receipt-tab">
-              <div className="upi-receipt-card">
-                <CheckCircle2 size={36} color="var(--green)" />
-                <h4>UPI Payment Received!</h4>
-                <span className="receipt-amount">₹420.00</span>
-                <span className="receipt-sub">Transferred instantly to Spice House HDFC Bank A/c</span>
-
-                <div className="receipt-breakdown">
-                  <div className="r-row">
-                    <span>Order Total:</span>
-                    <span>₹420.00</span>
-                  </div>
-                  <div className="r-row highlight-row">
-                    <span>MenuLink Commission:</span>
-                    <span className="green-txt">₹0.00 (0%)</span>
-                  </div>
-                  <div className="r-row">
-                    <span>Delivery App Fee:</span>
-                    <span className="strike-txt">₹126.00 Saved</span>
-                  </div>
+              <div className="receipt-breakdown">
+                <div className="r-row">
+                  <span>Restaurant Payout</span>
+                  <span className="green-txt">100% Direct to Bank</span>
+                </div>
+                <div className="r-row">
+                  <span>Aggregator Commission</span>
+                  <span className="strike-txt">₹{Math.round((lastOrder ? lastOrder.totalAmount : 370) * 0.30)}</span>
+                </div>
+                <div className="r-row">
+                  <span>MenuLink Fee</span>
+                  <span className="green-txt">₹0.00 (0%)</span>
+                </div>
+                <div className="r-row">
+                  <span>Txn Ref</span>
+                  <span>{lastOrder ? lastOrder.txnRef : 'UPI-TXN-9948201'}</span>
                 </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
-      <div className="chat-note">Try typing an order or clicking the Chat, Menu, or Payout tabs above.</div>
+      <p className="chat-note">⚡ Powered by Render AI Chat & MongoDB</p>
     </div>
   );
 }
