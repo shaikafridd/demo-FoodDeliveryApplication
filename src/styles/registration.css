@@ -1,0 +1,174 @@
+.registration-section {
+    padding: 60px 0 90px;
+}
+
+.registration-card {
+    background: var(--card);
+    border: 1.5px solid var(--ink);
+    border-radius: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    overflow: hidden;
+    box-shadow: 5px 5px 0 var(--ink);
+}
+
+.registration-left-graphic {
+    background: var(--green);
+    color: var(--paper);
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+.scooter-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--red);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 0 #000;
+}
+
+.scooter-visual {
+    margin: 30px 0;
+}
+
+.scooter-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    border: 2px solid var(--ink);
+}
+
+.big-logo-mark {
+    font-family: 'Kalam', cursive;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--red);
+}
+
+.scooter-visual h3 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.scooter-visual p {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.graphic-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 1.05rem;
+    color: #DCF3D2;
+}
+
+.registration-right-form {
+    padding: 40px;
+    background: var(--paper);
+}
+
+.form-head {
+    margin-bottom: 24px;
+}
+
+.badge-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--red);
+    display: block;
+    margin-bottom: 4px;
+}
+
+.form-head h2 {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+}
+
+.form-head p {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.reg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink);
+}
+
+.form-group input, .form-group select {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    font-family: inherit;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--green);
+}
+
+.form-submit-btn {
+    margin-top: 8px;
+    width: 100%;
+}
+
+.success-box {
+    text-align: center;
+    padding: 30px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.success-box h3 {
+    font-size: 1.4rem;
+}
+
+.success-box p {
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.success-sub {
+    font-size: 0.78rem;
+    color: var(--green);
+    font-weight: 700;
+}
+
+@media(max-width:900px) {
+    .registration-card { grid-template-columns: 1fr; }
+}
