@@ -496,7 +496,7 @@ h1 .red {
 .sim-animated-rider {
     margin-top: auto;
     background: var(--card);
-    border: 1px solid var(--line);
+    border: 1.5px solid var(--line);
     border-radius: 10px;
     padding: 8px 12px;
     display: flex;
@@ -579,6 +579,7 @@ h1 .red {
     width: 100%;
     box-shadow: 6px 6px 0 var(--ink);
     position: relative;
+    animation: blurReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .back-btn {
@@ -605,8 +606,8 @@ h1 .red {
 }
 
 .admin-icon-badge {
-    width: 54px;
-    height: 54px;
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
     background: var(--red);
     color: #fff;
@@ -619,7 +620,7 @@ h1 .red {
 }
 
 .admin-login-header h2 {
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     margin-bottom: 4px;
 }
 
@@ -648,19 +649,83 @@ h1 .red {
     gap: 16px;
 }
 
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.pwd-toggle-btn {
+    position: absolute;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.pwd-toggle-btn:hover {
+    color: var(--ink);
+}
+
 .login-hint-box {
     background: var(--paper);
-    border: 1px dashed var(--line);
-    padding: 10px;
-    border-radius: 8px;
+    border: 1.5px dashed var(--line);
+    padding: 14px;
+    border-radius: 12px;
     text-align: center;
-    font-size: 0.76rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+}
+
+.hint-header {
+    font-size: 0.75rem;
+    font-weight: 700;
     color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.hint-details {
+    font-size: 0.8rem;
+    color: var(--ink);
+}
+
+.autofill-btn {
+    background: var(--green);
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 14px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    transition: transform 0.2s ease;
+}
+
+.autofill-btn:hover {
+    transform: scale(1.04);
 }
 
 .login-submit-btn {
     width: 100%;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
 /* ADMIN PORTAL DASHBOARD */

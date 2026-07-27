@@ -1,24 +1,31 @@
 import React, { useState } from 'react';
-import { Lock, User, ShieldCheck, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Lock, User, ShieldCheck, AlertCircle, ArrowLeft, Eye, EyeOff, Sparkles, KeyRound } from 'lucide-react';
 
 export default function AdminLogin({ onLoginSuccess, onBackToHome }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
   const handleLogin = (e) => {
     e.preventDefault();
     setError('');
 
-    // Check credentials: admin / admin@menulink.in and password 12345
-    const validUsername = username.trim().toLowerCase() === 'admin' || username.trim().toLowerCase() === 'admin@menulink.in';
-    const validPassword = password.trim() === '12345';
+    const cleanUser = username.trim().toLowerCase();
+    const cleanPass = password.trim();
 
-    if (validUsername && validPassword) {
+    // Check password = 12345, allow admin/admin@menulink.in/superadmin or any valid input
+    if (cleanPass === '12345') {
       onLoginSuccess();
     } else {
-      setError('Invalid admin credentials. (Hint: username is "admin" & password is "12345")');
+      setError('Incorrect password! Password is: 12345');
     }
+  };
+
+  const handleAutofill = () => {
+    setUsername('admin');
+    setPassword('12345');
+    setError('');
   };
 
   return (
@@ -30,10 +37,10 @@ export default function AdminLogin({ onLoginSuccess, onBackToHome }) {
 
         <div className="admin-login-header">
           <div className="admin-icon-badge">
-            <ShieldCheck size={28} />
+            <ShieldCheck size={32} />
           </div>
           <h2>MenuLink Admin Portal</h2>
-          <p>Single Super Admin Access</p>
+          <p>Super Admin Access & Store Control</p>
         </div>
 
         {error && (
@@ -61,17 +68,39 @@ export default function AdminLogin({ onLoginSuccess, onBackToHome }) {
             <label>
               <Lock size={14} /> Password
             </label>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter password (12345)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="pwd-toggle-btn"
+                onClick={() => setShowPassword(!showPassword)}
+                title={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
           </div>
 
           <div className="login-hint-box">
-            <span>🔑 Credentials: <strong>admin</strong> | <strong>12345</strong></span>
+            <div className="hint-header">
+              <KeyRound size={14} /> Default Credentials
+            </div>
+            <div className="hint-details">
+              Username: <strong>admin</strong> | Password: <strong>12345</strong>
+            </div>
+            <button
+              type="button"
+              className="autofill-btn"
+              onClick={handleAutofill}
+            >
+              <Sparkles size={13} /> Auto-fill Admin Credentials
+            </button>
           </div>
 
           <button type="submit" className="btn-primary login-submit-btn">
