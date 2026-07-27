@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Bike, Sparkles, CheckCircle2, ArrowRight, Phone, MapPin, Store } from 'lucide-react';
+import { Bike, CheckCircle2, ArrowRight, Phone, MapPin, Store, Loader2 } from 'lucide-react';
+import { registerRestaurantApi } from '../services/api';
 
 export default function RegistrationSection() {
   const [formData, setFormData] = useState({
@@ -9,11 +10,22 @@ export default function RegistrationSection() {
     businessType: 'Restaurant'
   });
 
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.businessName || !formData.mobileNumber) return;
+    
+    setLoading(true);
+    await registerRestaurantApi({
+      name: formData.businessName,
+      ownerName: formData.businessName,
+      phone: formData.mobileNumber,
+      city: formData.location,
+      category: formData.businessType,
+    });
+    setLoading(false);
     setSubmitted(true);
   };
 
@@ -52,7 +64,7 @@ export default function RegistrationSection() {
               <p>
                 We've reserved your menu link for <strong>{formData.businessName}</strong> ({formData.location || 'Your Location'}).
               </p>
-              <span className="success-sub">Our onboarding specialist will reach out on WhatsApp ({formData.mobileNumber}) in under 10 minutes.</span>
+              <span className="success-sub">Saved to Node.js Backend Database. Our team will reach out on WhatsApp ({formData.mobileNumber}) in under 10 minutes.</span>
               <button className="btn-primary" onClick={() => setSubmitted(false)} style={{ marginTop: '16px' }}>
                 Submit Another Business
               </button>
@@ -112,8 +124,8 @@ export default function RegistrationSection() {
                 </select>
               </div>
 
-              <button type="submit" className="btn-primary form-submit-btn">
-                Create My MenuLink <ArrowRight size={16} />
+              <button type="submit" className="btn-primary form-submit-btn" disabled={loading}>
+                {loading ? <Loader2 className="animate-spin" size={16} /> : <>Create My MenuLink <ArrowRight size={16} /></>}
               </button>
             </form>
           )}
