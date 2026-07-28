@@ -103,6 +103,147 @@ h1, h2, .hero-left-content, .value-pills-left, .calculator-header, .visualizer-h
     transform: translateY(-2px);
 }
 
+/* VALUE PROP PILLS SECTION */
+.value-pills-section {
+    padding: 70px 0;
+}
+
+.value-pills-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 40px;
+    align-items: center;
+    background: var(--card);
+    border: 1.5px solid var(--ink);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 4px 4px 0 var(--ink);
+}
+
+.value-pills-left h2 {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    color: var(--ink);
+    line-height: 1.2;
+}
+
+.value-pills-left p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.value-detail-box {
+    background: #FAF6ED;
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 2px 2px 0 var(--ink);
+    position: relative;
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.detail-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #EAF4E8;
+    color: var(--green);
+    border: 1px solid var(--green);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.value-detail-box h3 {
+    font-size: 1.35rem;
+    color: var(--red);
+    margin-bottom: 8px;
+    font-family: 'Outfit', sans-serif;
+}
+
+.value-detail-box p {
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.detail-subtext {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 600;
+    display: block;
+    border-top: 1px dashed var(--line);
+    padding-top: 10px;
+}
+
+.value-pills-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.value-pill-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: #FAF6ED;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    gap: 12px;
+}
+
+.pill-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.pill-text {
+    flex: 1;
+}
+
+.pill-arrow {
+    color: var(--muted);
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.value-pill-btn:hover,
+.value-pill-btn.active {
+    background: var(--red);
+    color: #ffffff;
+    border-color: var(--ink);
+    transform: translateX(4px);
+    box-shadow: 2px 2px 0 var(--ink);
+}
+
+.value-pill-btn:hover .pill-dot,
+.value-pill-btn.active .pill-dot {
+    background: #ffffff;
+}
+
+.value-pill-btn:hover .pill-arrow,
+.value-pill-btn.active .pill-arrow {
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
 /* STATS BAR */
 .stats-bar {
     display: flex;
