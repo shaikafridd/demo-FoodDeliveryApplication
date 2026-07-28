@@ -24,10 +24,10 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 1.2rem;
-    transform: rotate(-3deg);
+    transform: none;
     transition: transform 0.2s ease;
 }
 
@@ -59,7 +59,7 @@ nav {
 }
 
 .btn-admin-nav {
-    background: var(--card);
+    background: transparent;
     border: 1.5px solid var(--ink);
     padding: 8px 16px;
     border-radius: 6px;
@@ -67,7 +67,6 @@ nav {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 2px 2px 0 var(--ink);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -75,8 +74,7 @@ nav {
 }
 
 .btn-admin-nav:hover {
-    background: var(--ink);
-    color: var(--paper);
+    background: rgba(43, 38, 32, 0.05);
 }
 
 .btn-start {
@@ -87,13 +85,13 @@ nav {
     font-size: 0.85rem;
     font-weight: 700;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(181, 67, 43, 0.2);
+    box-shadow: 0 4px 12px rgba(97, 28, 49, 0.2);
 }
 
 .btn-start:hover {
-    background: #9c3622;
+    background: #4d1525;
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(181, 67, 43, 0.3);
+    box-shadow: 0 6px 16px rgba(97, 28, 49, 0.3);
 }
 
 @media(max-width:900px) {

@@ -18,10 +18,10 @@ export default function Navbar({ onNavigate, currentRoute }) {
           className="btn-admin-nav" 
           onClick={() => onNavigate && onNavigate('admin')}
         >
-          🔐 Admin Portal
+          Login
         </button>
         <a className="btn-start" href="#register" onClick={() => onNavigate && onNavigate('home')}>
-          Get Started
+          Start Free
         </a>
       </div>
     </nav>

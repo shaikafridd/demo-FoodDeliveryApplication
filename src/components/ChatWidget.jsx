@@ -48,6 +48,36 @@ export default function ChatWidget() {
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [lastOrder, setLastOrder] = useState(null);
+  const [tiltStyle, setTiltStyle] = useState({});
+
+  const handleMouseMove = (e) => {
+    const container = e.currentTarget;
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const xc = rect.width / 2;
+    const yc = rect.height / 2;
+    const dx = x - xc;
+    const dy = y - yc;
+    
+    const rotateX = (dy / yc) * -12; // max tilt up/down 12 degrees
+    const rotateY = (dx / xc) * 12;  // max tilt left/right 12 degrees
+    
+    setTiltStyle({
+      transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`,
+      transition: 'transform 0.08s linear',
+      boxShadow: `${-rotateY * 0.5}px ${rotateX * 0.5 + 15}px 35px rgba(0, 0, 0, 0.25)`,
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTiltStyle({
+      transform: 'rotateX(0deg) rotateY(0deg) scale(1)',
+      transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+    });
+  };
+
   const chatEndRef = useRef(null);
 
   useEffect(() => {
@@ -205,7 +235,12 @@ export default function ChatWidget() {
   const cartTotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
   return (
-    <div className="phone-frame">
+    <div 
+      className="phone-frame"
+      style={tiltStyle}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className="phone-screen">
         {/* Header */}
         <div className="chat-head">

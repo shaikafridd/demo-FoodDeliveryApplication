@@ -199,7 +199,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 1.5rem;
     border: 2px solid var(--ink);
@@ -296,7 +296,7 @@
 }
 
 .metric-value {
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.6rem;
     font-weight: 700;
     line-height: 1.1;
@@ -408,7 +408,7 @@
 }
 
 .order-num-badge {
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-weight: 700;
     font-size: 0.95rem;
     display: block;

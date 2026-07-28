@@ -35,6 +35,7 @@
 .chat-demo-container {
     max-width: 360px;
     margin: 0 auto;
+    perspective: 1000px;
 }
 
 .phone-frame {
@@ -296,7 +297,7 @@
 
 .receipt-amount {
     display: block;
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.8rem;
     color: var(--green);
     font-weight: 700;

@@ -60,7 +60,7 @@
 }
 
 .revenue-display {
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.6rem;
     color: var(--red);
 }
@@ -121,7 +121,7 @@
 }
 
 .box-amount {
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.6rem;
     font-weight: 700;
     margin: 6px 0;
@@ -173,7 +173,7 @@
 
 .highlight-green {
     color: #4ade80;
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.6rem;
 }
 

@@ -1,9 +1,9 @@
 import React from 'react';
 
 const BRAND_LOGOS = [
-  { name: "BABAI HOTEL", sub: "Est. 1942 • Tiffins", color: "#b5432b", bg: "#fdf0ed" },
+  { name: "BABAI HOTEL", sub: "Est. 1942 • Tiffins", color: "#611c31", bg: "#f7ebed" },
   { name: "BIRYANI FACTORY", sub: "Mughlai & Biryani", color: "#2b2620", bg: "#efe6d0" },
-  { name: "VELLANKI FOODS", sub: "Sweets & Namkeen", color: "#b5432b", bg: "#fbf5e8" },
+  { name: "VELLANKI FOODS", sub: "Sweets & Namkeen", color: "#611c31", bg: "#fbf5e8" },
   { name: "IDEAL KITCHEN", sub: "Cloud Kitchen", color: "#3d5c3a", bg: "#eef5ed" },
   { name: "AAZEBO", sub: "Mandi & Grill", color: "#1b2a4a", bg: "#eaeef5" },
   { name: "ARUGU", sub: "Regional Dining", color: "#8c5a2b", bg: "#f7f0e8" },

@@ -3,6 +3,39 @@ import { Play, Pause, Sparkles, CheckCircle2, ShoppingCart } from 'lucide-react'
 
 export default function HeroVideoMockup() {
   const [isPlaying, setIsPlaying] = useState(true);
+  const [tiltStyle, setTiltStyle] = useState({
+    transform: 'rotateY(-8deg) rotateX(4deg)',
+    transition: 'transform 0.5s ease',
+  });
+
+  const handleMouseMove = (e) => {
+    const container = e.currentTarget;
+    const rect = container.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const xc = rect.width / 2;
+    const yc = rect.height / 2;
+    const dx = x - xc;
+    const dy = y - yc;
+    
+    const rotateX = (dy / yc) * -20; // max tilt up/down 20 degrees
+    const rotateY = (dx / xc) * 20;  // max tilt left/right 20 degrees
+    
+    setTiltStyle({
+      transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`,
+      transition: 'transform 0.08s linear',
+      boxShadow: `${-rotateY * 0.8}px ${rotateX * 0.8 + 20}px 45px rgba(0, 0, 0, 0.35)`,
+      animation: 'none' // Disable floating animation on hover
+    });
+  };
+
+  const handleMouseLeave = () => {
+    setTiltStyle({
+      transform: 'rotateY(-8deg) rotateX(4deg)',
+      transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)',
+    });
+  };
 
   return (
     <div className="hero-video-wrapper">
@@ -21,7 +54,12 @@ export default function HeroVideoMockup() {
         </div>
 
         {/* 3D Phone Shell */}
-        <div className="phone-3d-shell">
+        <div 
+          className="phone-3d-shell"
+          style={tiltStyle}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+        >
           <div className="phone-notch">
             <div className="camera-dot" />
             <div className="speaker-bar" />

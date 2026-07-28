@@ -18,7 +18,7 @@ const BUSINESSES = [
     title: "Small Restaurant",
     desc: "Take direct orders without paying commission.",
     icon: Store,
-    bgGradient: "linear-gradient(135deg, #b5432b, #f2cc8f)",
+    bgGradient: "linear-gradient(135deg, #611c31, #efe6d0)",
   },
 ];
 
