@@ -35,6 +35,7 @@
 .chat-demo-container {
     max-width: 380px;
     margin: 0 auto;
+    perspective: 1000px;
 }
 
 /* REAL WHATSAPP PHONE FRAME */
@@ -289,6 +290,31 @@
     background: #128C7E;
 }
 
+.receipt-amount {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    color: var(--green);
+    font-weight: 700;
+    margin: 4px 0;
+}
+
+.receipt-sub {
+    display: block;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+}
+
+.receipt-breakdown {
+    border-top: 1px dashed var(--line);
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.72rem;
+}
+
 /* INTERACTIVE MENU ITEM CARDS IN CHAT */
 .wa-menu-grid {
     display: flex;
@@ -401,7 +427,7 @@
 }
 
 .wa-receipt-amount {
-    font-family: 'Kalam', cursive;
+    font-family: 'Outfit', sans-serif;
     font-size: 1.6rem;
     font-weight: 700;
     color: #166534;
