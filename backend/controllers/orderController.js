@@ -1,32 +1,14 @@
 const Order = require('../models/Order');
 
 /**
- * @desc    Create new Customer Order
- * @route   POST /api/orders
- * @access  Public
+ * @desc    Get All Customer Orders (for Admin)
+ * @route   GET /api/orders
+ * @access  Public / Admin
  */
-exports.createOrder = async (req, res) => {
+exports.getAllOrders = async (req, res) => {
   try {
-    const { restaurantId, customerName, customerPhone, deliveryAddress, items, totalAmount } = req.body;
-
-    const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
-    const order = await Order.create({
-      orderNumber,
-      restaurantId,
-      customerName: customerName || 'Guest User',
-      customerPhone: customerPhone || '9876543210',
-      deliveryAddress: deliveryAddress || 'Table / Direct Delivery',
-      items: items || [],
-      totalAmount: totalAmount || 0,
-      orderStatus: 'Received',
-      paymentStatus: 'Pending',
-    });
-
-    res.status(201).json({
-      success: true,
-      message: 'Order created successfully',
-      order,
-    });
+    const orders = await Order.find().sort({ createdAt: -1 });
+    res.json({ success: true, count: orders.length, orders });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -47,6 +29,51 @@ exports.getOrdersByRestaurant = async (req, res) => {
 };
 
 /**
+ * @desc    Create new Customer Order
+ * @route   POST /api/orders
+ * @access  Public
+ */
+exports.createOrder = async (req, res) => {
+  try {
+    const { restaurantId, customerName, customerPhone, deliveryAddress, items, totalAmount, orderStatus } = req.body;
+
+    const orderNumber = `ORD-${Date.now().toString().slice(-6)}`;
+    
+    // Map items if array of strings or objects
+    const formattedItems = Array.isArray(items) ? items.map(item => {
+      if (typeof item === 'string') {
+        return { name: item, price: 100, quantity: 1 };
+      }
+      return {
+        name: item.name || 'Food Item',
+        price: item.price || 100,
+        quantity: item.quantity || 1,
+      };
+    }) : [];
+
+    const order = await Order.create({
+      orderNumber,
+      restaurantId: restaurantId && restaurantId.length === 24 ? restaurantId : '66a5e1234567890123456789',
+      customerName: customerName || 'Guest Customer',
+      customerPhone: customerPhone || '9876543210',
+      deliveryAddress: deliveryAddress || 'Direct Delivery / Table Order',
+      items: formattedItems,
+      totalAmount: totalAmount || 250,
+      orderStatus: orderStatus || 'Received',
+      paymentStatus: 'Paid',
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Order created successfully',
+      order,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
  * @desc    Update Order Status
  * @route   PATCH /api/orders/:id/status
  * @access  Public / Admin
@@ -60,6 +87,20 @@ exports.updateOrderStatus = async (req, res) => {
       { new: true }
     );
     res.json({ success: true, order });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * @desc    Delete Order Record
+ * @route   DELETE /api/orders/:id
+ * @access  Public / Admin
+ */
+exports.deleteOrder = async (req, res) => {
+  try {
+    await Order.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Order deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

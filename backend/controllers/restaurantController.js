@@ -9,13 +9,13 @@ exports.registerRestaurant = async (req, res) => {
   try {
     const { name, ownerName, email, phone, city, category } = req.body;
 
-    if (!name || !ownerName || !phone) {
-      return res.status(400).json({ success: false, message: 'Business Name, Owner Name, and Phone Number are required' });
+    if (!name || !phone) {
+      return res.status(400).json({ success: false, message: 'Business Name and Phone Number are required' });
     }
 
     const restaurant = await Restaurant.create({
       name,
-      ownerName,
+      ownerName: ownerName || name,
       email: email || `${phone}@menulink.in`,
       phone,
       city: city || 'Hyderabad',
@@ -59,6 +59,39 @@ exports.getRestaurantById = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Restaurant not found' });
     }
     res.json({ success: true, restaurant });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * @desc    Update Restaurant Status
+ * @route   PATCH /api/restaurants/:id/status
+ * @access  Public / Admin
+ */
+exports.updateRestaurantStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    const restaurant = await Restaurant.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+    res.json({ success: true, restaurant });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * @desc    Delete Restaurant
+ * @route   DELETE /api/restaurants/:id
+ * @access  Public / Admin
+ */
+exports.deleteRestaurant = async (req, res) => {
+  try {
+    await Restaurant.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Restaurant deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
