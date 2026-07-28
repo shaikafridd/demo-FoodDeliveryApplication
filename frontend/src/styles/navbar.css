@@ -1,0 +1,103 @@
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 30px;
+    max-width: 1180px;
+    margin: 0 auto;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.3rem;
+}
+
+.logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--red);
+    color: #fff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Kalam', cursive;
+    font-weight: 700;
+    font-size: 1.2rem;
+    transform: rotate(-3deg);
+    transition: transform 0.2s ease;
+}
+
+.logo:hover .logo-mark {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.nav-links {
+    display: flex;
+    gap: 26px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.nav-links a {
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: var(--red);
+}
+
+.nav-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-admin-nav {
+    background: var(--card);
+    border: 1.5px solid var(--ink);
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 2px 2px 0 var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink);
+}
+
+.btn-admin-nav:hover {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.btn-start {
+    background: var(--red);
+    color: #fff;
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(181, 67, 43, 0.2);
+}
+
+.btn-start:hover {
+    background: #9c3622;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(181, 67, 43, 0.3);
+}
+
+@media(max-width:900px) {
+    .nav-links {
+        display: none;
+    }
+}
