@@ -14,8 +14,14 @@ export default function Navbar({ onNavigate, currentRoute }) {
         <a href="#demo" onClick={() => onNavigate && onNavigate('home')}>Live Demo</a>
       </div>
       <div className="nav-actions">
+        <button 
+          className="btn-admin-nav" 
+          onClick={() => onNavigate && onNavigate('admin')}
+        >
+          Login
+        </button>
         <a className="btn-start" href="#register" onClick={() => onNavigate && onNavigate('home')}>
-          Get Started
+          Start Free
         </a>
       </div>
     </nav>
