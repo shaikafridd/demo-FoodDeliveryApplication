@@ -81,6 +81,7 @@ export default function RegistrationSection() {
                   value={formData.businessName}
                   onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -94,6 +95,7 @@ export default function RegistrationSection() {
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -108,6 +110,7 @@ export default function RegistrationSection() {
                   value={formData.mobileNumber}
                   onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value })}
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -116,6 +119,7 @@ export default function RegistrationSection() {
                 <select
                   value={formData.businessType}
                   onChange={(e) => setFormData({ ...formData, businessType: e.target.value })}
+                  disabled={loading}
                 >
                   <option value="Restaurant">Small / Medium Restaurant</option>
                   <option value="HomeChef">Home Chef / Cloud Kitchen</option>
@@ -124,9 +128,25 @@ export default function RegistrationSection() {
                 </select>
               </div>
 
-              <button type="submit" className="btn-primary form-submit-btn" disabled={loading}>
-                {loading ? <Loader2 className="animate-spin" size={16} /> : <>Create My MenuLink <ArrowRight size={16} /></>}
+              <button
+                type="submit"
+                className={`btn-primary form-submit-btn ${loading ? 'btn-loading' : ''}`}
+                disabled={loading}
+                style={loading ? { cursor: 'wait', opacity: 0.8 } : {}}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="animate-spin" size={16} /> Connecting to Backend...
+                  </>
+                ) : (
+                  <>Create My MenuLink <ArrowRight size={16} /></>
+                )}
               </button>
+              {loading && (
+                <p style={{ fontSize: '0.72rem', color: 'var(--muted)', marginTop: '8px', textAlign: 'center' }}>
+                  ⚡ Waking up Render backend database (may take a few seconds on first request)...
+                </p>
+              )}
             </form>
           )}
         </div>

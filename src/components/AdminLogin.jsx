@@ -33,7 +33,7 @@ export default function AdminLogin({ onLoginSuccess, onBackToHome }) {
   return (
     <div className="admin-login-wrapper">
       <div className="admin-login-card">
-        <button className="back-btn" onClick={onBackToHome}>
+        <button className="back-btn" onClick={onBackToHome} disabled={loading}>
           <ArrowLeft size={16} /> Back to Main Site
         </button>
 
@@ -64,6 +64,7 @@ export default function AdminLogin({ onLoginSuccess, onBackToHome }) {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
+                disabled={loading}
                 autoFocus
               />
             </div>
@@ -80,11 +81,17 @@ export default function AdminLogin({ onLoginSuccess, onBackToHome }) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
               />
             </div>
           </div>
 
-          <button type="submit" className="btn-primary login-submit-btn" disabled={loading}>
+          <button
+            type="submit"
+            className={`btn-primary login-submit-btn ${loading ? 'btn-loading' : ''}`}
+            disabled={loading}
+            style={loading ? { cursor: 'wait', opacity: 0.8 } : {}}
+          >
             {loading ? (
               <>
                 <Loader2 className="animate-spin" size={18} /> Authenticating...
@@ -95,6 +102,11 @@ export default function AdminLogin({ onLoginSuccess, onBackToHome }) {
               </>
             )}
           </button>
+          {loading && (
+            <p style={{ fontSize: '0.72rem', color: 'var(--muted)', marginTop: '8px', textAlign: 'center' }}>
+              ⚡ Verifying credentials with Render backend database...
+            </p>
+          )}
         </form>
 
         <div className="admin-security-footer">

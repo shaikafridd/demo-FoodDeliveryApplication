@@ -521,3 +521,46 @@ footer {
         font-size: 0.8rem;
     }
 }
+
+/* DISABLED & LOADING STATES FOR BACKEND COLD START */
+button:disabled,
+.btn-disabled,
+button[disabled] {
+    opacity: 0.65 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    box-shadow: none !important;
+}
+
+.btn-loading {
+    cursor: wait !important;
+    opacity: 0.85;
+}
+
+@media (max-width: 900px) {
+    .value-pills-grid {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+        padding: 24px 18px !important;
+    }
+    .value-pills-left h2 {
+        font-size: 1.6rem !important;
+    }
+    .value-pill-btn {
+        padding: 12px 14px !important;
+        font-size: 0.82rem !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .value-pills-grid {
+        padding: 18px 14px !important;
+    }
+    .value-detail-box {
+        padding: 16px !important;
+    }
+    .value-detail-box h3 {
+        font-size: 1.15rem !important;
+    }
+}
+
