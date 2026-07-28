@@ -4,7 +4,7 @@ import HeroVideoMockup from './HeroVideoMockup';
 
 export default function Hero() {
   return (
-    <section className="wrap hero">
+    <section className="wrap hero" id="hero">
       <div className="hero-left-content">
         <div className="tag-box">
           NO COMMISSION · INSTANT PAYMENTS · WHATSAPP ORDERS
