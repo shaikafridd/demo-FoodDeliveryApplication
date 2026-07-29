@@ -6,11 +6,12 @@ const connectDB = async () => {
   // Try connecting to primary MONGO_URI
   try {
     const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 3000,
+      serverSelectionTimeoutMS: 5000,
     });
     console.log(`[MongoDB] Connected successfully to host: ${conn.connection.host}`);
     return;
   } catch (error) {
+    console.error(`❌ [MongoDB Error] Failed to connect to primary database: ${error.message}`);
     // If primary URI is unresolvable or fails, fall back to local MongoDB instance
     if (mongoUri !== 'mongodb://127.0.0.1:27017/menulink') {
       try {
@@ -20,7 +21,7 @@ const connectDB = async () => {
         console.log(`[MongoDB] Connected to local database instance: ${localConn.connection.host}`);
         return;
       } catch (localErr) {
-        console.log(`[MongoDB] Operating in autonomous backend API mode.`);
+        console.log(`[MongoDB] Operating in offline fallback mode (No database connected).`);
       }
     }
   }

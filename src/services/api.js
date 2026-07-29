@@ -1,5 +1,5 @@
-const API_BASE_URL = 'http://localhost:5000/api';
-const RENDER_CHAT_URL = 'https://demo-menulnk.onrender.com/chat';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const RENDER_CHAT_URL = import.meta.env.VITE_CHAT_URL || 'https://demo-menulnk.onrender.com/chat';
 
 export function getLocalStoreData(key, fallback) {
   try {
