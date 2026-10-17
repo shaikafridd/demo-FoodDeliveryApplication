@@ -1,15 +1,20 @@
 # 🍔 MenuLink — Direct Food Delivery & Restaurant Platform
 
-> **Empowering Restaurants with 0% Commission Direct Online Ordering, WhatsApp AI Automation, and Live Admin Portal.**
+> **Empowering Restaurants with 0% Commission Direct Online Ordering, WhatsApp AI Automation, and Real-Time Kitchen Operations.**
 
-![MenuLink Hero Banner](./assets/images/menulink-hero.jpg)
+---
+
+> [!NOTE]
+> ### 💼 Investor Pitch & Demonstration Prototype
+> **Notice:** This repository is an MVP / functional demo project designed to pitch and showcase to **investors for funding**. It demonstrates the viability, technical architecture, and end-to-end user workflows of replacing high-commission third-party delivery aggregators with direct-to-consumer digital ordering and conversational WhatsApp commerce.
 
 ---
 
 ## 📌 Table of Contents
-- [Overview](#-overview)
-- [Visual Showcase](#-visual-showcase)
-- [Key Features](#-key-features)
+- [Executive Summary](#-executive-summary)
+- [The Problem vs. The MenuLink Solution](#-the-problem-vs-the-menulink-solution)
+- [Key Platform Features](#-key-platform-features)
+- [Investor Value Proposition](#-investor-value-proposition)
 - [Technology Stack](#-technology-stack)
 - [Project Architecture](#-project-architecture)
 - [Getting Started](#-getting-started)
@@ -19,79 +24,91 @@
   - [Frontend Setup](#3-frontend-setup)
 - [API Endpoints](#-api-endpoints)
 - [Default Admin Credentials](#-default-admin-credentials)
-- [Deployment](#-deployment)
+- [Deployment Guide](#-deployment-guide)
 - [License](#-license)
 
 ---
 
-## 🌟 Overview
+## 🌟 Executive Summary
 
-**MenuLink** is an end-to-end, zero-commission direct ordering system built for restaurants, cloud kitchens, fine dining establishments, and quick-service outlets. Traditional food aggregators charge **25% – 35% commission** on every single order, eroding restaurant profit margins. 
+**MenuLink** is a direct-to-consumer ordering infrastructure built for independent restaurants, home chefs, cloud kitchens, and franchise chains. 
 
-MenuLink restores financial freedom to food businesses by providing:
-1. **A Direct Digital Storefront** for customers to browse menus and place orders directly.
-2. **Automated WhatsApp AI Chat Ordering** for instant friction-free ordering via chat messaging.
-3. **A Live Administrative Portal** for real-time order tracking, menu inventory management, and revenue analytics.
-4. **Aggregator Savings Analytics** helping owners track thousands of dollars saved monthly.
+Traditional delivery aggregators (e.g., Swiggy, Zomato, UberEats) charge restaurant owners between **25% and 35% commission** on every order, capture the customer data, and delay payouts by 7–15 days. MenuLink levels the playing field by providing food businesses with an instant digital storefront, conversational WhatsApp AI ordering, direct UPI payouts, and a centralized operations dashboard with **0% commission fees**.
 
 ---
 
-## 📸 Visual Showcase
+## ⚖️ The Problem vs. The MenuLink Solution
 
-### 1. Direct Online Ordering Storefront & Hero
-*Sleek, high-converting digital storefront with glassmorphism UI, interactive POS badges, and instant checkout.*
-![MenuLink Storefront](./assets/images/menulink-hero.jpg)
-
----
-
-### 2. Live Restaurant Admin Portal & Order Tracking
-*Comprehensive kitchen management interface featuring real-time order status tracking (Pending, Preparing, Out for Delivery, Delivered), stock management, and sales analytics.*
-![Admin Portal](./assets/images/admin-portal.jpg)
+| Core Dimension | Traditional Delivery Aggregators | MenuLink Direct Platform |
+| :--- | :--- | :--- |
+| **Commission Rate** | 25% – 35% cut taken from every sale | **0% Commission** (100% revenue retained) |
+| **Payout Timing** | 7 – 15 business days payout cycle | **Instant UPI direct bank deposits** |
+| **Customer Data Ownership** | Hidden / Masked customer contacts | **100% Owned by the restaurant** for remarketing |
+| **Ordering Channel** | Third-party app downloads required | **Web link + Native WhatsApp ordering** |
+| **Brand Identity** | Listed among competitors on aggregator app | **Dedicated, branded ordering experience** |
 
 ---
 
-### 3. WhatsApp AI & Chat Ordering Assistant
-*Interactive conversational food ordering experience allowing customers to view menus, customize orders, and pay directly inside WhatsApp/Chat.*
-![WhatsApp Chat Ordering](./assets/images/whatsapp-ordering.jpg)
+## 🔥 Key Platform Features
+
+### 1. 📱 WhatsApp Business AI Chat Ordering
+- **Friction-Free Ordering**: Customers can discover outlets, browse menus, customize dishes, and order directly inside a native WhatsApp-style chat interface without downloading any mobile app.
+- **Location-Based Discovery**: Automatically suggests nearby outlets based on delivery location (e.g., Hyderabad, Hitec City, Jubilee Hills, Bengaluru).
+- **Interactive In-Chat Catalog**: Dynamic restaurant cards and dish selection buttons directly in the chat stream.
+- **Direct UPI Instant Payments**: Automated payment links with real-time transaction verification and downloadable 0% commission digital receipts.
+
+### 2. 👨‍🍳 Kitchen Admin Portal & Order Pipeline
+- **Real-Time Kanban Management**: Kitchen operators can manage incoming orders through structured status states: `Received` ➔ `Preparing` ➔ `Out for Delivery` ➔ `Delivered`.
+- **Live Revenue & Sales Analytics**: Real-time tracking of gross sales volume, commission saved, active order count, and payment settlements.
+- **Instant Digital Receipts**: Print-ready and downloadable order invoices with complete itemized breakdowns.
+- **Manual Order Entry**: Ability for restaurant staff to input phone or walk-in orders into the centralized pipeline.
+
+### 3. 🍲 Menu & Real-Time Stock Management
+- **Instant Availability Toggling**: One-click toggle to disable out-of-stock items across customer menus instantly.
+- **Rich Menu Customization**: Organize dishes by category (Main Course, Biryani, Tiffins, Beverages), update prices, add descriptions, and adjust portions on the fly.
+- **Multi-Location Menu Sync**: Support for single outlets as well as multi-branch chain operations.
+
+### 4. 🏬 Restaurant Partner Onboarding & Management
+- **Self-Serve Partner Registration**: Seamless 15-minute onboarding flow capturing business details, contact information, cuisine categories, and UPI credentials.
+- **Multi-Outlet Administration**: Platform admins can view, approve, manage, and monitor all onboarded partner kitchens from one central view.
+
+### 5. 📊 Interactive Aggregator Cost & Savings Visualizer
+- **Dynamic ROI Calculator**: Interactive revenue sliders that allow prospective restaurant partners and investors to visualize monthly and annual savings by eliminating aggregator fees.
+- **Side-by-Side Comparison Matrix**: Clear metrics highlighting direct payment speed, customer relationship ownership, and fee structures.
+
+### 6. 🔌 Ecosystem Integration Ready
+- **POS & Billing Systems**: Architecture designed to connect with industry-standard POS software (Petpooja, UrbanPiper, POSist, Toast, Square).
+- **Third-Party Logistics**: Dispatch integration ready for on-demand hyper-local courier fleets (Shadowfax, LoadShare, Dunzo, Porter).
 
 ---
 
-### 4. Interactive Aggregator Cost & Savings Visualizer
-*Financial visualizer demonstrating exact savings of 0% MenuLink direct ordering versus 30% aggregator commission fees.*
-![Savings Calculator](./assets/images/savings-calculator.jpg)
+## 💼 Investor Value Proposition
 
----
-
-## 🔥 Key Features
-
-- ⚡ **0% Commission Direct Ordering**: Eliminate high third-party aggregator cuts and retain 100% of order profits.
-- 📱 **WhatsApp AI Chat Widget**: Interactive chat widget allowing customers to browse dishes, specify custom notes, and trigger instant orders.
-- 👨‍🍳 **Real-Time Kitchen Kanban Board**: Manage incoming orders through structured order states: `Pending`, `Preparing`, `Out for Delivery`, and `Delivered`.
-- 📊 **Dynamic Savings Calculator**: Live slider to compute projected annual savings based on monthly order volume and average ticket size.
-- 🍲 **Instant Menu & Stock Management**: Toggle dish availability on the fly, edit prices, categories, and descriptions seamlessly.
-- 🔌 **POS & Logistics Integrations Ready**: Built-in visual support for Petpooja, UrbanPiper, Toast, Square, POSist, Dunzo, and Shadowfax.
-- 🔐 **JWT-Based Admin Authentication**: Secure login system with token verification and protected routes.
-- 🌐 **Responsive Glassmorphic Design**: Modern dark theme with fluid animations, glowing metrics cards, and micro-interactions.
+- **Massive TAM**: The food and beverage direct-ordering and software market is growing rapidly as restaurant margins are squeezed by aggregator monopolies.
+- **Compelling Unit Economics**: Predictable SaaS subscription / flat micro-fee pricing model compared to unsustainable high-percentage commission models.
+- **Viral Growth Loops**: Every restaurant that shares its MenuLink digital menu link brings organic, repeat customers without costly customer acquisition spend.
+- **High Retention & Stickiness**: Once a restaurant integrates its menu, WhatsApp audience, and kitchen printer workflow into MenuLink, switching costs are high.
 
 ---
 
 ## 🛠 Technology Stack
 
-### Frontend
+### Frontend Client
 - **Framework**: [React 18](https://react.dev/) + [Vite](https://vitejs.dev/)
 - **Icons**: [Lucide React](https://lucide.dev/)
-- **Routing**: Client-side hash & history routing with state synchronization
-- **Styling**: Vanilla CSS (Custom Glassmorphism, CSS Variables, Responsive Grid/Flexbox)
+- **Styling**: Modern responsive CSS system (custom palette, CSS Variables, Flexbox & Grid)
+- **State & Routing**: Client-side history & hash routing (`#admin`, `/admin`) with persistent session storage
 
-### Backend
+### Backend REST API
 - **Runtime**: [Node.js](https://nodejs.org/)
 - **Framework**: [Express.js](https://expressjs.com/)
-- **Database**: [MongoDB](https://www.mongodb.com/) via [Mongoose ORM](https://mongoosejs.com/)
-- **Authentication**: JWT (JSON Web Tokens) & `bcryptjs` password hashing
-- **Security & CORS**: Enabled cross-origin requests & environment configuration (`dotenv`)
+- **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose ORM](https://mongoosejs.com/)
+- **Authentication & Security**: JWT (JSON Web Tokens), `bcryptjs` password hashing, and CORS protection
+- **AI Chat Service**: Integrated webhook adapter for conversational ordering responses
 
-### Deployment Configuration
-- Ready for deployment on **Vercel**, **Netlify**, or **Render** with pre-configured configuration files (`vercel.json`, `netlify.toml`, `render.yaml`).
+### Deployment Ready
+- **Frontend**: Configured for deployment on **Netlify** or **Vercel** (`netlify.toml`, `public/_redirects`, `vercel.json`).
+- **Backend**: Configured for deployment on **Render**, **Railway**, or **AWS** (`render.yaml`).
 
 ---
 
@@ -99,41 +116,49 @@ MenuLink restores financial freedom to food businesses by providing:
 
 ```
 food-delivery/
-├── assets/
-│   └── images/                     # Screenshots and graphics for documentation
-│       ├── menulink-hero.jpg
-│       ├── admin-portal.jpg
-│       ├── whatsapp-ordering.jpg
-│       └── savings-calculator.jpg
 ├── backend/                        # Express.js REST API Server
-│   ├── config/                     # Database connection configuration (db.js)
-│   ├── controllers/                # Controller logic for auth, menu, orders, etc.
-│   ├── models/                     # Mongoose schemas (Admin, Menu, Order, Payment, Restaurant)
-│   ├── routes/                     # API routes definition
-│   ├── seed.js                     # Seed script for initial database setup
-│   ├── server.js                   # Node Express server entry point
-│   └── .env.example                # Sample environment variables for backend
-├── public/                         # Public assets & rewrite rules
-│   └── _redirects
+│   ├── config/                     # Database connection & Atlas fallback (db.js)
+│   ├── controllers/                # Business logic (auth, menu, orders, payments, restaurants)
+│   ├── models/                     # Mongoose Schemas (Admin, Menu, Order, Payment, Restaurant)
+│   ├── routes/                     # REST API route endpoints
+│   ├── seed.js                     # Mock database seed script for demo data
+│   ├── server.js                   # Express application entry point
+│   ├── package.json                # Backend dependencies
+│   └── .env.example                # Sample environment configuration
+├── public/                         # Static assets & routing rewrites
+│   └── _redirects                  # Netlify SPA redirect rules
 ├── src/                            # React Application Source
-│   ├── components/                 # Reusable UI components
-│   │   ├── AdminLogin.jsx          # Admin authentication modal/page
-│   │   ├── AdminPortal.jsx         # Main administrative dashboard & order manager
+│   ├── components/                 # UI components
+│   │   ├── AdminLogin.jsx          # Admin authentication with masked password
+│   │   ├── AdminPortal.jsx         # Kitchen Kanban & management dashboard
 │   │   ├── AggregatorCostVisualizer.jsx
-│   │   ├── ChatWidget.jsx          # Live WhatsApp / AI Chat assistant widget
-│   │   ├── ComparisonTable.jsx     # Side-by-side aggregator vs MenuLink feature table
+│   │   ├── BusinessTypes.jsx       # Outlets supported (Cloud Kitchen, Bakery, etc.)
+│   │   ├── ChatDemoSection.jsx     # WhatsApp ordering showcase container
+│   │   ├── ChatWidget.jsx          # Live WhatsApp conversational order engine
+│   │   ├── ComparisonTable.jsx     # Side-by-side aggregator vs MenuLink table
+│   │   ├── FinalCTA.jsx            # Conversion banner
+│   │   ├── FloatingQuickWidget.jsx # Recent real-time social proof toast
+│   │   ├── Footer.jsx              # Footer links and copyright
 │   │   ├── Hero.jsx                # Landing page hero banner
-│   │   ├── Navbar.jsx              # Navigation header with admin toggle
-│   │   ├── RegistrationSection.jsx # Restaurant partner onboarding form
-│   │   ├── SavingsCalculator.jsx   # Interactive 0% commission calculator
-│   │   └── ... (21 modular components)
-│   ├── services/                   # API service integration helpers
-│   ├── styles/                     # CSS stylesheets per component domain
-│   ├── App.jsx                     # Main root React component & route manager
-│   └── main.jsx                    # Entry mount point
-├── netlify.toml                    # Netlify deployment configuration
-├── render.yaml                     # Render service manifest
+│   │   ├── HeroVideoMockup.jsx     # Interactive digital ordering mockup
+│   │   ├── HowItWorks.jsx          # 4-step ordering guide
+│   │   ├── IntegrationsMarquee.jsx # POS & logistics partner showcase
+│   │   ├── LogoMarquee.jsx         # Trusted restaurant brand marquee
+│   │   ├── Navbar.jsx              # Navigation header
+│   │   ├── RegistrationSection.jsx # Restaurant onboarding registration form
+│   │   ├── SavingsCalculator.jsx   # Live savings slider
+│   │   ├── StatsBar.jsx            # Platform impact counters
+│   │   ├── StickyStackingFeatures.jsx
+│   │   └── ValuePropPills.jsx      # Feature value pills
+│   ├── services/                   # Unified API adapter layer
+│   ├── styles/                     # Modular domain stylesheets
+│   ├── App.jsx                     # Top-level application root & route router
+│   ├── index.css                   # Global styles
+│   └── main.jsx                    # Vite React DOM entry point
+├── netlify.toml                    # Netlify production build configuration
+├── render.yaml                     # Render deployment service definition
 ├── vercel.json                     # Vercel deployment routes
+├── vite.config.js                  # Vite bundler configuration
 └── package.json                    # Root scripts and frontend dependencies
 ```
 
@@ -142,69 +167,61 @@ food-delivery/
 ## 🚀 Getting Started
 
 ### Prerequisites
-Make sure you have the following installed on your system:
 - **Node.js** (v18.0.0 or higher)
 - **npm** (v9.0.0 or higher)
-- **MongoDB** (Local instance or MongoDB Atlas cluster URI)
+- **MongoDB** (Local instance or MongoDB Atlas cluster connection URI)
 
 ---
 
 ### 1. Backend Setup
 
-1. Navigate into the `backend` directory:
+1. Open a terminal and navigate to the `backend/` folder:
    ```bash
    cd backend
    ```
-2. Install dependencies:
+2. Install backend dependencies:
    ```bash
    npm install
    ```
-3. Create a `.env` file inside `backend/` directory (or copy from `.env.example`):
+3. Create a `.env` file inside `backend/`:
    ```env
    PORT=5000
-   MONGO_URI=mongodb://127.0.0.1:27017/menulink_db
+   MONGO_URI=mongodb://127.0.0.1:27017/menulink
    JWT_SECRET=menulink_super_secret_jwt_key_2026
-   NODE_ENV=development
    ```
 
 ---
 
 ### 2. Database Seeding
 
-To populate MongoDB with sample admin credentials, sample restaurants, food menu items, test orders, and payment records:
+Populate your database with demo restaurants, menu items, orders, and payment records:
 
 ```bash
-npm run seed
+node seed.js
 ```
 
-Then start the backend server:
+Start the backend server:
 ```bash
-# Development mode with hot-reload
 npm run dev
-
-# Or standard production mode
+# Or production mode:
 npm start
 ```
-*The backend API server will be available at `http://localhost:5000`.*  
-*Check health status at `http://localhost:5000/api/health`.*
+- **Backend API URL**: `http://localhost:5000`
+- **Healthcheck Endpoint**: `http://localhost:5000/api/health`
 
 ---
 
 ### 3. Frontend Setup
 
-1. Return to the root directory:
-   ```bash
-   cd ..
-   ```
-2. Install dependencies:
+1. Open a second terminal in the project root:
    ```bash
    npm install
    ```
-3. Start the Vite development server:
+2. Launch the Vite development server:
    ```bash
    npm run dev
    ```
-4. Open your browser and navigate to `http://localhost:5173`.
+3. Open `http://localhost:5173` in your browser.
 
 ---
 
@@ -212,48 +229,57 @@ npm start
 
 | Category | Endpoint | Method | Description |
 | :--- | :--- | :--- | :--- |
-| **Health** | `/api/health` | `GET` | Verify backend server status and version |
-| **Auth** | `/api/admin/login` | `POST` | Authenticate admin user & receive JWT |
-| **Auth** | `/api/admin/me` | `GET` | Get current logged-in admin profile |
-| **Restaurants**| `/api/restaurants` | `GET` / `POST` | Fetch or update restaurant profile details |
-| **Menu** | `/api/menu` | `GET` / `POST` | Get or add food menu items |
-| **Menu** | `/api/menu/:id` | `PUT` / `DELETE`| Update dish details/stock or remove dish |
-| **Orders** | `/api/orders` | `GET` / `POST` | Fetch all orders or create a new order |
-| **Orders** | `/api/orders/:id/status`| `PATCH` | Update order state (`Pending` ➔ `Preparing` ➔ `Out for Delivery` ➔ `Delivered`) |
-| **Payments** | `/api/payments` | `GET` / `POST` | Process & fetch order payments |
+| **Health** | `/api/health` | `GET` | Health status and API service version |
+| **Auth** | `/api/admin/login` | `POST` | Authenticate admin credentials and generate JWT token |
+| **Restaurants** | `/api/restaurants` | `GET` / `POST` | List all restaurants or onboard a new partner outlet |
+| **Restaurants** | `/api/restaurants/:id/status` | `PATCH` | Update restaurant status (`Active` / `Inactive`) |
+| **Menu** | `/api/menu` | `GET` / `POST` | Fetch catalog dishes or add a new menu item |
+| **Menu** | `/api/menu/:id` | `PUT` / `DELETE` | Update price/details or delete menu item |
+| **Menu** | `/api/menu/:id/stock` | `PATCH` | Toggle availability status (`inStock` true/false) |
+| **Orders** | `/api/orders` | `GET` / `POST` | Fetch order pipeline or submit a new customer order |
+| **Orders** | `/api/orders/:id/status` | `PATCH` | Update kitchen status (`Received`, `Preparing`, `Delivered`) |
+| **Payments** | `/api/payments` | `GET` | Fetch all payment transaction records |
+| **Payments** | `/api/payments/verify` | `POST` | Verify instant UPI transaction reference |
 
 ---
 
 ## 🔑 Default Admin Credentials
 
-After running `npm run seed` in the backend, you can log in to the **Admin Portal** using:
-
-- **URL**: Click **"Admin Portal"** in the top navigation bar or navigate to `#admin`.
-- **Email**: `admin@menulink.com`
-- **Password**: `admin123`
+To access the live Admin Management Dashboard:
+- **Route**: Navigate to `/#admin` or `/admin`
+- **Email / Username**: `admin@menulink.in` or `admin`
+- **Password**: `12345` (or `adminpassword123`)
 
 ---
 
-## ☁️ Deployment
+## ☁️ Deployment Guide
 
-### Deploying Frontend (Vercel / Netlify)
-- **Build Command**: `npm run build`
-- **Output Directory**: `dist`
-- **Redirects / SPA Routing**: Pre-configured in `public/_redirects`, `netlify.toml`, and `vercel.json`.
+### Frontend Deployment (Netlify)
+1. Link your GitHub repository to Netlify.
+2. Build Settings:
+   - **Build Command**: `npm run build`
+   - **Publish Directory**: `dist`
+3. Netlify automatically consumes `netlify.toml` and `public/_redirects` to handle client-side routing.
 
-### Deploying Backend (Render / Railway / Heroku)
-- **Environment Variables**: Set `MONGO_URI`, `JWT_SECRET`, and `NODE_ENV=production`.
-- **Build Command**: `npm install`
-- **Start Command**: `node server.js`
+### Backend Deployment (Render)
+1. Create a new **Web Service** on Render and connect this repository.
+2. Build Settings:
+   - **Root Directory**: `backend`
+   - **Build Command**: `npm install`
+   - **Start Command**: `node server.js`
+3. Add Environment Variables:
+   - `MONGO_URI`: Your MongoDB Atlas connection URI
+   - `JWT_SECRET`: Secure encryption key
+   - `PORT`: `5000`
 
 ---
 
 ## 📄 License
 
-This project is open-source and licensed under the **MIT License**.
+This demo project is distributed under the **MIT License**.
 
 ---
 
-<p center>
-Made with ❤️ by MenuLink Team — Saving restaurants one order at a time! 🍕🍔🚀
+<p align="center">
+  <b>MenuLink</b> — Direct Online Ordering & WhatsApp Commerce Infrastructure 🚀🍕
 </p>
